@@ -1,0 +1,8 @@
+html, body { margin: 0; height: 100%; }
+body {
+  --from: #1E3A8A; --to: #DB2777; --angle: 135deg;
+  background: linear-gradient(var(--angle), var(--from), var(--to), var(--from));
+  background-size: 300% 300%;
+  animation: drift 30s ease-in-out infinite alternate;
+}
+@keyframes drift { from { background-position: 0% 0%; } to { background-position: 100% 100%; } }

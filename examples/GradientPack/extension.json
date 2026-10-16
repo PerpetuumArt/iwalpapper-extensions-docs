@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 3,
+  "id": "app.iwalpapper.examples.gradient-pack",
+  "version": "0.1.0",
+  "kind": "wallpaper",
+  "title": "Seaside Gradients",
+  "description": "Two gradients in sea colours. An example preset pack for extension schema 3.",
+  "author": { "name": "iWalpapper" },
+  "wallpaper": {
+    "presets": [
+      { "id": "tide-pool", "title": "Tide Pool", "description": "Teal and sand, drifting slowly.", "mesh": "gradients/tide-pool.json" },
+      { "id": "harbour-night", "title": "Harbour Night", "description": "Deep blue with a warm light at the edge.", "mesh": "gradients/harbour-night.json" }
+    ]
+  }
+}

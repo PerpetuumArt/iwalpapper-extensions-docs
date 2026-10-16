@@ -1,0 +1,11 @@
+{
+  "background": "#0F3D3E",
+  "loopSeconds": 120,
+  "swirl": 0.2,
+  "grain": 0.3,
+  "points": [
+    { "x": 0.2, "y": 0.3, "color": "#1F8A84", "size": 0.7, "drift": 0.18, "cyclesX": 1, "cyclesY": 1, "phase": 0 },
+    { "x": 0.8, "y": 0.7, "color": "#E8D5A9", "size": 0.55, "drift": 0.2, "cyclesX": 1, "cyclesY": 2, "phase": 0.4 },
+    { "x": 0.6, "y": 0.2, "color": "#3FB7A8", "size": 0.5, "drift": 0.15, "cyclesX": 2, "cyclesY": 1, "phase": 0.7 }
+  ]
+}

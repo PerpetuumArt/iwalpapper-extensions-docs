@@ -1,0 +1,30 @@
+html, body { margin: 0; height: 100%; overflow: hidden; }
+body {
+  --top: #02030A; --middle: #0A0F24; --horizon: #141B3A;
+  --sun-x: 50%; --sun-y: 120%; --sun: #FFF6D8; --sun-opacity: 0;
+  --stars: 1; --star-field: none; --star-field-far: none;
+  background: linear-gradient(180deg, var(--top) 0%, var(--middle) 55%, var(--horizon) 100%);
+}
+.stars { position: absolute; left: 0; top: 0; width: 1px; height: 1px; border-radius: 50%; background: transparent; }
+.stars.near { box-shadow: var(--star-field); animation: twinkle 7s ease-in-out infinite alternate; }
+.stars.far { box-shadow: var(--star-field-far); animation: twinkle 11s ease-in-out -4s infinite alternate; }
+@keyframes twinkle { from { opacity: calc(var(--stars) * 0.55); } to { opacity: var(--stars); } }
+.moon {
+  position: absolute; left: 74%; top: 18%; width: 4.5vmin; height: 4.5vmin; border-radius: 50%;
+  background: #E8ECF6; box-shadow: 0 0 6vmin 1vmin #C9D3F033; opacity: calc(var(--stars) * 0.9);
+}
+/* The light around the sun, kept to its own corner of the sky: a large glow costs every frame. */
+.glow {
+  position: absolute; left: var(--sun-x); top: var(--sun-y); width: 70vmin; height: 70vmin;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(closest-side, var(--sun), transparent);
+  opacity: calc(var(--sun-opacity) * 0.45);
+  animation: breathe 15s ease-in-out infinite alternate;
+}
+.sun {
+  position: absolute; left: var(--sun-x); top: var(--sun-y); width: 7vmin; height: 7vmin;
+  transform: translate(-50%, -50%); border-radius: 50%;
+  background: radial-gradient(closest-side, #FFFFFF, var(--sun) 70%, transparent);
+  opacity: var(--sun-opacity);
+}
+@keyframes breathe { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.06); } }

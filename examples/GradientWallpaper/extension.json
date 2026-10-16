@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 3,
+  "id": "app.iwalpapper.examples.gradient-wallpaper",
+  "version": "0.1.1",
+  "kind": "wallpaper",
+  "title": "Drifting Gradient",
+  "description": "Two colours drifting slowly across the screen. An example code wallpaper for extension schema 3.",
+  "author": { "name": "iWalpapper" },
+  "entry": { "path": "index.html", "runtime": "web" },
+  "bridgeVersion": 2,
+  "settings": [
+    { "id": "from", "type": "color", "title": "First colour", "default": "#1E3A8A" },
+    { "id": "to", "type": "color", "title": "Second colour", "default": "#DB2777" },
+    { "id": "style", "type": "choice", "title": "Direction", "options": ["Diagonal", "Vertical"], "default": "Diagonal" },
+    { "id": "speed", "type": "slider", "title": "Speed", "min": 0.25, "max": 4, "step": 0.25, "default": 1 }
+  ]
+}
