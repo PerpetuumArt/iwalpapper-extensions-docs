@@ -1,11 +1,12 @@
 {
   "schemaVersion": 3,
   "id": "app.iwalpapper.examples.date-widget",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "kind": "widget",
   "title": "Date",
   "description": "Today's date and time on a glass card. An example widget for extension schema 3.",
   "author": { "name": "iWalpapper" },
+  "homepage": "https://github.com/PerpetuumArt/iwalpapper-extensions-docs/tree/main/examples/DateWidget",
   "entry": { "path": "index.html", "runtime": "web" },
   "bridgeVersion": 2,
   "widget": { "container": "glass", "cornerRadius": 22, "size": [320, 160], "resizable": false },

@@ -1,10 +1,11 @@
 {
   "schemaVersion": 3,
   "id": "app.iwalpapper.examples.shader-wallpaper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "kind": "wallpaper",
   "title": "Silk Waves",
   "description": "Soft folds of colour, drawn by a GLSL shader. An example shader wallpaper for extension schema 3.",
   "author": { "name": "iWalpapper" },
+  "homepage": "https://github.com/PerpetuumArt/iwalpapper-extensions-docs/tree/main/examples/ShaderWallpaper",
   "wallpaper": { "shader": "main.frag" }
 }

@@ -27,6 +27,7 @@ refused, so typos show up at once.
   "title": "Hello",
   "description": "The time, on a glass card.",
   "author": { "name": "Your Name" },
+  "homepage": "https://github.com/yourname/hello-widget",
   "entry": { "path": "index.html", "runtime": "web" },
   "bridgeVersion": 2,
   "widget": { "container": "glass", "cornerRadius": 22, "size": [280, 120] }
@@ -37,6 +38,8 @@ refused, so typos show up at once.
   with the same `id` replaces the old one.
 - `version` is a semantic version (`0.1.0`). Raise it whenever you share a change.
 - `kind` is `widget`, `wallpaper` or `source`.
+- `homepage` is optional: where people find your extension, its source and its updates (an
+  absolute http(s) address).
 
 ## 3. Write the page
 

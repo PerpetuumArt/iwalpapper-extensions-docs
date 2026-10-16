@@ -1,11 +1,12 @@
 {
   "schemaVersion": 3,
   "id": "app.iwalpapper.examples.gradient-wallpaper",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "kind": "wallpaper",
   "title": "Drifting Gradient",
   "description": "Two colours drifting slowly across the screen. An example code wallpaper for extension schema 3.",
   "author": { "name": "iWalpapper" },
+  "homepage": "https://github.com/PerpetuumArt/iwalpapper-extensions-docs/tree/main/examples/GradientWallpaper",
   "entry": { "path": "index.html", "runtime": "web" },
   "bridgeVersion": 2,
   "settings": [

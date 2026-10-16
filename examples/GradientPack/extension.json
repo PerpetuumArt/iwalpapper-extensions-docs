@@ -1,11 +1,12 @@
 {
   "schemaVersion": 3,
   "id": "app.iwalpapper.examples.gradient-pack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "kind": "wallpaper",
   "title": "Seaside Gradients",
   "description": "Two gradients in sea colours. An example preset pack for extension schema 3.",
   "author": { "name": "iWalpapper" },
+  "homepage": "https://github.com/PerpetuumArt/iwalpapper-extensions-docs/tree/main/examples/GradientPack",
   "wallpaper": {
     "presets": [
       { "id": "tide-pool", "title": "Tide Pool", "description": "Teal and sand, drifting slowly.", "mesh": "gradients/tide-pool.json" },

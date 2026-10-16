@@ -1,11 +1,12 @@
 {
   "schemaVersion": 3,
   "id": "app.iwalpapper.examples.time-wallpaper",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "kind": "wallpaper",
   "title": "Daylight Sky",
   "description": "A sky through the day and night: the sun rises, crosses and sets, and the stars come out. An example time generator for extension schema 3.",
   "author": { "name": "iWalpapper" },
+  "homepage": "https://github.com/PerpetuumArt/iwalpapper-extensions-docs/tree/main/examples/TimeWallpaper",
   "entry": { "path": "index.html", "runtime": "web" },
   "bridgeVersion": 2,
   "times": ["00:00", "05:30", "07:00", "10:00", "13:00", "17:00", "19:30", "21:00"],
