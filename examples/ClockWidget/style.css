@@ -1,0 +1,5 @@
+/* No container: the time sits on the wallpaper. SVG text stays sharp when the host scales the page. */
+html, body { margin: 0; height: 100%; background: transparent; overflow: hidden; }
+svg { display: block; width: 100%; height: 100%; overflow: visible; }
+/* The native clock's soft shadow (CALayer radius 8, 35%); lock-screen ink casts none. */
+text.shadow { filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.35)); }

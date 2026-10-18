@@ -12,8 +12,10 @@ when the extension is added, and can be revoked later.
 ```
 
 `permissions` is a list of different names from the table below. `network` (the object) is present
-exactly when the list has `network`: 1-8 lowercase domains the page may `fetch` over https, and
-nothing else.
+exactly when the list has `network`: 1-8 lowercase domains the page may `fetch` over https
+(subdomains included), and nothing else. Only widgets get permissions for now; a code wallpaper
+that asks for one is refused, except `location` for a time generator's `"sunrise"` and `"sunset"`
+([Wallpapers › Sunrise and sunset](wallpapers.md#sunrise-and-sunset)).
 
 | Name | Gives | The person sees | Ready in |
 |---|---|---|---|
@@ -24,14 +26,43 @@ nothing else.
 | `location` | coarse location | "Can use your approximate location", then the macOS prompt | 0.7.1 |
 | `nowPlaying` | song, artwork, progress, play/pause/skip | "Can see and control what's playing" | 0.7.2 |
 
+### Network
+
+`fetch` (and `XMLHttpRequest`, `WebSocket`, `EventSource`) reaches `https://<host>/…` and
+`https://<sub>.<host>/…` for the listed hosts. Everything else, plain `http` included, is blocked
+twice: by the page's security policy (`connect-src`) and by iWalpapper's own block list for that
+widget's frame. Your page's origin is `iwalpapper-widget://…`, so the server has to allow
+cross-origin requests (`Access-Control-Allow-Origin: *`, as most public APIs send). A failed fetch
+rejects like any other: show the last value you kept in [`storage`](bridge.md#storage-widgets).
+
+### System stats
+
+`iwalpapper.system` gives battery, CPU, memory and network speed, sampled every 5 seconds while the
+widget runs ([Bridge › System](bridge.md#system-widgets-systemstats)).
+
+### Location
+
+`iwalpapper.location` gives `{ latitude, longitude }` to 2 decimals, or `null` until the person
+allows it in the macOS prompt ([Bridge › Location](bridge.md#location-widgets-location)).
+
+### Calendar
+
+`iwalpapper.calendar` gives the next week's events (title, times, all day, colour), or `null`
+until the person allows it in the macOS prompt ([Bridge › Calendar](bridge.md#calendar-widgets-calendar)).
+
+Until a permission's release, a folder that asks for it is refused when it is added or checked
+(Validate and the live preview say which release brings it), so no install sheet promises what the
+sandbox still blocks.
+
 The install sheet always ends with "Can't read your files or other apps". Ask only for
 what you use: every line is one more reason for someone to click Cancel.
 
 ## Updates and revoking
 
 - An update that adds a permission asks again; one that keeps or drops them doesn't.
-- Revoking a permission keeps the extension installed. Its calls to that namespace fail with
-  `permission`, so handle that and show something useful (the last stored value, a hint) instead of
+- People switch each permission off and on in the widget's row of the Widgets panel. Switching
+  one off keeps the extension installed; its calls to that namespace fail with `permission` (and
+  with `network` off, every fetch is refused), so handle that and show something useful (the last stored value, a hint) instead of
   an empty card.
 - There's no code review for widgets and wallpapers: the sandbox, not a review, keeps them safe.
 

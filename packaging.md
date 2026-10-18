@@ -28,12 +28,18 @@ error names the field. The manifest is at most 64 KiB.
 - Pages (widgets, code wallpapers): HTML in UTF-8, CSS and JavaScript in their own files, no inline
   `<style>`, `<script>`, `style="…"` or `on…=`. Leave out data files the page would `fetch`: only
   HTML, CSS, JavaScript, images and fonts are served to the page.
+- Don't name a top-level folder `_iwalpapper`: in a widget, iWalpapper serves its own files there
+  (the lock screen's faces), so yours are never reached.
 - Leave out build tools, `node_modules`, `.git` and test files: everything in the folder is copied.
 
 ## Check it
 
-Adding the folder to iWalpapper is the check: a manifest or page that breaks a rule is refused
-with a message naming what's wrong. For a widget use its wallpaper's **Widgets** panel; for
+In iWalpapper, with **Settings › General › Experimental › Show tools for making extensions** on,
+**Make your own › Validate…** checks a folder or `.zip` exactly as adding it would,
+without copying or running anything. It names the first problem it finds (fix it and check again
+for the next), or shows what people will see when they add it, with **Zip for Sharing…**.
+
+Adding the folder runs the same checks. For a widget use its wallpaper's **Widgets** panel; for
 anything else, **Add Extension** in Discover. iWalpapper works on its own copy, so add the folder
 again after each change.
 

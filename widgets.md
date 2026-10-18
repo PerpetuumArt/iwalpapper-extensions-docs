@@ -4,7 +4,7 @@ A widget is a small web page placed on a wallpaper: a clock, the date, the weath
 the card (the container) and lays your page over it, so the page draws only its content on a
 transparent background.
 
-Example: [`Examples/DateWidget`](examples/DateWidget).
+Examples: [`Examples/DateWidget`](examples/DateWidget); [`Examples/ClockWidget`](examples/ClockWidget), the clock port (no container, lock-screen faces, glass text, `resizable`).
 
 ## Manifest
 
@@ -30,10 +30,11 @@ Example: [`Examples/DateWidget`](examples/DateWidget).
 |---|---|---|
 | `entry` | yes | `path`: a relative `.html`/`.htm` file of at most 1 MiB; `runtime`: `"web"` |
 | `bridgeVersion` | yes | `2` |
-| `widget.container` | yes | `glass`, `clear`, `frosted` or `solid` (below) |
+| `widget.container` | yes | `glass`, `clear`, `frosted`, `solid` or `none` (below) |
 | `widget.cornerRadius` | no | 0-100 points, default 22 |
 | `widget.size` | yes | `[width, height]` in whole points, each 32-4096 |
-| `widget.resizable` | no | default `false` |
+| `widget.resizable` | no | default `false`; `true` lets people make it larger or smaller (0.7.1, below) |
+| `widget.interactive` | no | default `false`; `true` to take clicks ([below](#the-page)) |
 | `settings` | no | controls people can change ([below](#settings)) |
 | `permissions`, `network` | no | see [Permissions](permissions.md) |
 
@@ -48,8 +49,13 @@ described in [Packaging](packaging.md#manifest-fields-every-kind-has).
 | `clear` | macOS clear Liquid Glass |
 | `frosted` | macOS regular (frosted) Liquid Glass |
 | `solid` | A dark, almost opaque card |
+| `none` | Nothing: no card, shadow or light; your page sits on the wallpaper as it is (0.7.1) |
 
 Before macOS 26, `clear` and `frosted` fall back to a blurred material.
+
+A `resizable` widget can be drawn from half to three times its `size`, with the Size slider in its row. Your page still lays out at
+`size`, in its own points, and iWalpapper scales the whole of it, card and clicks included: draw
+for `size` and it stays sharp at any scale.
 
 People can switch a glass widget's shadow off in its Widgets panel row. Don't draw your own card,
 border or shadow: CSS `backdrop-filter` can't see the wallpaper behind the page, so it blurs nothing,
@@ -71,8 +77,13 @@ All widgets on a display share one web view, each in its own frame and origin
   JavaScript in files. `<style>`, a `<script>` without `src`, `style="…"` and `onclick=` attributes
   are refused when the extension is added.
 - **Only your own files and the bridge.** No other origin is reachable unless you declare the
-  `network` permission (0.7.1).
-- **No clicks until 0.7.1.** A widget shows; it doesn't take the pointer yet.
+  `network` permission; then `fetch` reaches its hosts over https ([Permissions › Network](permissions.md#network)).
+- **Clicks only if you ask.** With `"interactive": true` in `widget`, a press inside your card
+  reaches your page as `pointerdown`, `mousedown`, `pointermove` while held, `pointerup`, `mouseup`
+  and `click` on the element under it, so `button.addEventListener("click", …)` just works. Only
+  presses on the bare desktop come through (not through a window), there's no hover and no
+  keyboard, and the events are synthetic (`isTrusted` is false). Without it, clicks go through to
+  the desktop; ask only if the widget does something when clicked.
 - **Be cheap.** Redraw on `time.on("minute")` rather than every second where you can. When the
   wallpaper is paused, iWalpapper shows a still of your widget and hides the web view; when it is
   released, the web view goes. Your page starts again from scratch when it comes back, so keep

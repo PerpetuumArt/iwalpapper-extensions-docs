@@ -19,10 +19,12 @@ Working examples, ready to copy:
 | Example | Kind |
 |---|---|
 | [`DateWidget`](examples/DateWidget) | widget with a setting |
+| [`ClockWidget`](examples/ClockWidget) | widget with no container, the lock-screen faces, glass text and a Size slider |
 | [`GradientWallpaper`](examples/GradientWallpaper) | code wallpaper with colour, choice and slider settings |
 | [`GradientPack`](examples/GradientPack) | preset pack of two gradients |
 | [`ShaderWallpaper`](examples/ShaderWallpaper) | GLSL shader |
 | [`TimeWallpaper`](examples/TimeWallpaper) | time generator: eight times of day |
 
-`effect` and `bundle` kinds are planned (0.7.5, 0.7.7) and refused for now. Widgets take no clicks
-until 0.7.1; network, system stats, calendar and location arrive in 0.7.1, Now Playing in 0.7.2.
+`effect` and `bundle` kinds are planned (0.7.5, 0.7.7) and refused for now. Widgets take clicks
+when they ask (`"interactive": true`) and can use `network`, `systemStats`, `location` and
+`calendar`; Now Playing arrives in 0.7.2.

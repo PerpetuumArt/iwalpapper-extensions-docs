@@ -48,7 +48,7 @@ or shows live data) says `"playback": "live"`.
 | `resolution` | no | `"display"` (default) or `"soft"`: recorded 1280 pixels wide in the display's shape, quicker and smaller. Use it for soft shapes (gradients, skies); text and fine lines need `"display"`. Not with `"live"` |
 | `times` | no | makes it a [time generator](#time-generators). Not with `"live"` |
 | `settings` | no | controls chosen before adding ([below](#settings)) |
-| `permissions`, `network` | no | see [Permissions](permissions.md) |
+| `permissions`, `network` | no | only `["location"]`, and only for [sun times](#sunrise-and-sunset); otherwise [permissions](permissions.md) are for widgets |
 
 The page follows the same rules as a widget's: CSS and JavaScript in files (no inline `<style>`,
 `<script>`, `style="…"` or `on…=`), relative paths, only its own files. It fills the screen and
@@ -118,6 +118,22 @@ const hour = now.getHours() + now.getMinutes() / 60;
 
 In the Discover preview the page runs at the real time, so check each of your times by changing
 your Mac's clock, or by temporarily replacing `now` with a fixed `new Date()` in a browser.
+
+### Sunrise and sunset
+
+A time can be `"sunrise"` or `"sunset"`, with the `location` permission:
+
+```json
+"times": ["sunrise", "12:00", "sunset", "22:00"],
+"permissions": ["location"]
+```
+
+iWalpapper works out the day's sunrise and sunset from the Mac's approximate location and plays
+those loops then, moving them each day. They're recorded at that day's times, and your page never
+gets the location (it's recorded, not live). For the order, and until the location is known (or
+where the sun doesn't rise or set that day), sunrise counts as 06:00 and sunset as 18:00, so
+`["05:00", "sunrise"]` is fine and `["06:00", "sunrise"]` is refused. A sun time can't pass its
+neighbours: a 04:50 sunrise after a `"05:00"` plays at 05:01.
 
 ## Preset packs
 

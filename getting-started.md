@@ -3,6 +3,10 @@
 You'll make a small widget that shows the time on a glass card, add it to iWalpapper and place it on
 a wallpaper. You need iWalpapper and a text editor; nothing to install.
 
+Short on time? Turn on **Settings › General › Experimental › Show tools for making extensions**, then
+**Make your own › Create Extension…** (the capsule beside Add Extension) writes a working folder for any kind (by default in `iWalpapper/Extensions`, beside your library's `Wallpapers`) and opens a live preview, in its own window, that reloads each time you
+save; **Open Existing…** there previews a folder you already started. This guide builds the same thing by hand, so you know what each file does.
+
 ## 1. Make the folder
 
 ```

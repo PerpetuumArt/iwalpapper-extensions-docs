@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 3,
+  "id": "app.iwalpapper.clock",
+  "version": "0.1.2",
+  "kind": "widget",
+  "title": "Clock",
+  "description": "The time and date as the lock screen draws them, on the wallpaper itself. The native Clock widget, made as an extension.",
+  "author": { "name": "iWalpapper" },
+  "entry": { "path": "index.html", "runtime": "web" },
+  "bridgeVersion": 2,
+  "widget": { "container": "none", "size": [640, 300], "resizable": true },
+  "settings": [
+    { "id": "font", "type": "choice", "title": "Font", "options": ["System", "SF Pro", "Rounded", "New York", "Slab", "Soft", "Rail", "Stencil"], "default": "System" },
+    { "id": "weight", "type": "slider", "title": "Weight", "min": 0, "max": 1, "step": 0.01, "default": 0.8 },
+    { "id": "date", "type": "toggle", "title": "Show date", "default": true },
+    { "id": "hours", "type": "choice", "title": "Time", "options": ["System", "24-hour", "12-hour"], "default": "System" },
+    { "id": "colour", "type": "choice", "title": "Colour", "options": ["System", "Glass", "Adaptive", "White", "Black"], "default": "System" },
+    { "id": "brightness", "type": "slider", "title": "Brightness", "min": 0, "max": 1, "step": 0.01, "default": 0.7 }
+  ]
+}
