@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Music</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="widget">
+  <div id="head">
+    <button id="artwork" type="button" aria-label="Artwork; click twice to open the app">
+      <img id="cover" alt="">
+      <svg class="note" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 17.5V6l10-2v11.5a2.5 2.5 0 1 1-2-2.45V7.1L11 8.3v9.2a2.5 2.5 0 1 1-2-2.45z"/></svg>
+      <span id="armed" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h9v2H8.4l10.3 10.3-1.4 1.4L7 8.4V14H5z"/></svg></span>
+      <img id="badge" alt="">
+    </button>
+    <div id="titles">
+      <div id="title">Nothing playing</div>
+      <div id="artist">Play something in Music, Spotify or a browser</div>
+      <div id="miniWave" class="wave" aria-hidden="true"></div>
+      <div id="miniProgress" class="bar" aria-hidden="true"><div class="fill"></div></div>
+    </div>
+    <img id="icon" alt="">
+    <div id="miniControls" class="controls"></div>
+  </div>
+  <div id="wave" class="wave" aria-hidden="true"></div>
+  <div id="progress">
+    <div id="track" class="bar"><div class="fill"></div></div>
+    <div id="times"><span id="elapsed">0:00</span><span id="remaining">-0:00</span></div>
+  </div>
+  <div id="controls" class="controls"></div>
+</main>
+<template id="buttons">
+  <button type="button" class="previous" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6zm.5-6 8.5 6V6z"/></svg></button>
+  <button type="button" class="toggle" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path class="play" d="M7 4.5v15l12-7.5z"/><path class="pause" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+  <button type="button" class="next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6zm9-12v12l8.5-6z"/></svg></button>
+</template>
+<script src="main.js"></script>
+</body>
+</html>

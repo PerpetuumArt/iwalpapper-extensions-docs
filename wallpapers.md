@@ -4,7 +4,7 @@ A wallpaper extension (`"kind": "wallpaper"`) is one of four things:
 
 | Form | You write | Example |
 |---|---|---|
-| [Code wallpaper](#code-wallpapers) | a web page (`entry`) | [`GradientWallpaper`](examples/GradientWallpaper) |
+| [Code wallpaper](#code-wallpapers) | a web page (`entry`) | [`GradientWallpaper`](examples/GradientWallpaper); live: [`MusicWallpaper`](examples/MusicWallpaper) |
 | [Time generator](#time-generators) | a web page that reads the hour, plus `times` | [`TimeWallpaper`](examples/TimeWallpaper) |
 | [Preset pack](#preset-packs) | gradient recipes (`wallpaper.presets`), no code | [`GradientPack`](examples/GradientPack) |
 | [Shader](#shaders) | one GLSL file (`wallpaper.shader`) | [`ShaderWallpaper`](examples/ShaderWallpaper) |
@@ -48,7 +48,7 @@ or shows live data) says `"playback": "live"`.
 | `resolution` | no | `"display"` (default) or `"soft"`: recorded 1280 pixels wide in the display's shape, quicker and smaller. Use it for soft shapes (gradients, skies); text and fine lines need `"display"`. Not with `"live"` |
 | `times` | no | makes it a [time generator](#time-generators). Not with `"live"` |
 | `settings` | no | controls chosen before adding ([below](#settings)) |
-| `permissions`, `network` | no | only `["location"]`, and only for [sun times](#sunrise-and-sunset); otherwise [permissions](permissions.md) are for widgets |
+| `permissions` | no | live: `nowPlaying`, `audioLevels` ([below](#live-wallpapers)); recorded: only `["location"]`, and only for [sun times](#sunrise-and-sunset). No `network` |
 
 The page follows the same rules as a widget's: CSS and JavaScript in files (no inline `<style>`,
 `<script>`, `style="…"` or `on…=`), relative paths, only its own files. It fills the screen and
@@ -77,9 +77,8 @@ window.iwalpapper?.on?.("settings", (s) => {
 });
 ```
 
-`settings.current()` returns the same values at any time. Code wallpapers get `settings` and
-`time.current()` from the bridge; the rest of it (`display`, `palette`, `storage`) is for widgets in
-0.7.0.
+`settings.current()` returns the same values at any time. A recorded wallpaper gets only `settings`
+and `time.current()` from the bridge; a [live one](#live-wallpapers) gets most of it.
 
 **A speed setting changes the rate, never the length of the loop.** Values arrive while the slider
 is dragged. A page that sets a new `animation-duration`, or draws from `time * speed`, jumps to
@@ -89,10 +88,27 @@ another point of its loop at every step. Keep the position and change how fast i
 
 ### Live wallpapers
 
-With `"playback": "live"`, the page itself goes in the Library and runs on the desktop (a video
-version is recorded too, for when the app saves power). Its settings stay changeable on its
-Library page and reach the running page through `on("settings")` without a reload. iWalpapper asks
-"Run …?" when a live page is set as the wallpaper, until the person turns that question off.
+With `"playback": "live"`, the page itself goes in the Library and runs on the desktop, as one
+full-screen frame of the widget host (0.7.2): it gets the bridge as a widget does (`display`,
+`storage`, `time.on("minute")`, clicks and hover, `haptic`; the table is in
+[Bridge reference](bridge.md#what-each-kind-gets)), and may ask for `nowPlaying` and `audioLevels`.
+Clicks reach it only on the bare desktop, and moves without a press arrive as hover events.
+Paused, a still of the page stands in for it; released, the still stays and the page goes.
+
+Its settings stay changeable on its Library page, under their `group` headings, and reach the
+running page through `on("settings")` without a reload. An `apps` setting is picked there too
+(Discover starts it at All).
+
+- **Without permissions:** a video version is recorded too, for the lock screen and Convert to
+  Video. iWalpapper asks "Run …?" when it is set as the wallpaper, until the person turns that off.
+- **With permissions:** Add & Use and Add to Library show what it may do, once, in place of "Run …?";
+  its Library page and Settings › Privacy have a switch for each. It isn't recorded (what it shows
+  is live data), so it has no video version and doesn't play on the lock screen. Handle a permission
+  switched off: its calls throw `Error("permission")`.
+
+[`MusicWallpaper`](examples/MusicWallpaper) is the native Now Playing wallpaper made this
+way: the artwork's colours as a WebGL gradient drawn small and stretched at 10 frames a second, and
+the artwork, song and controls over it.
 
 ## Time generators
 
@@ -235,7 +251,7 @@ cleanly (use `iTime * 2.0 * 3.14159265 / 30.0` as an angle).
 
 ## Checklist
 
-1. Pick the form: recipe, shader, page, or page with `times`.
+1. Pick the form: recipe, shader, page (recorded or live), or page with `times`.
 2. Page: CSS and JS in files; fills the screen; loops in 30 seconds.
 3. Speed settings change the rate, not the loop length.
 4. Add it with **Add Extension** in Discover; after each change, add the folder again.

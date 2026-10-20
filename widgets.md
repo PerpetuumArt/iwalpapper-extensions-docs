@@ -4,7 +4,7 @@ A widget is a small web page placed on a wallpaper: a clock, the date, the weath
 the card (the container) and lays your page over it, so the page draws only its content on a
 transparent background.
 
-Examples: [`Examples/DateWidget`](examples/DateWidget); [`Examples/ClockWidget`](examples/ClockWidget), the clock port (no container, lock-screen faces, glass text, `resizable`).
+Examples: [`Examples/DateWidget`](examples/DateWidget); [`Examples/ClockWidget`](examples/ClockWidget), the clock port (no container, lock-screen faces, glass text, `resizable`); [`Examples/MusicWidget`](examples/MusicWidget), the music port (Now Playing, audio levels, layouts, looks, hover, `setVisible`).
 
 ## Manifest
 
@@ -35,6 +35,8 @@ Examples: [`Examples/DateWidget`](examples/DateWidget); [`Examples/ClockWidget`]
 | `widget.size` | yes | `[width, height]` in whole points, each 32-4096 |
 | `widget.resizable` | no | default `false`; `true` lets people make it larger or smaller (0.7.1, below) |
 | `widget.interactive` | no | default `false`; `true` to take clicks ([below](#the-page)) |
+| `widget.containers` | no | the containers people may pick in the row's Look, `container` (the default) among them: `["glass", "frosted", "solid"]`. Your page gets the chosen one as `settings.look` |
+| `widget.layouts` | no | named sizes people pick in the row's Layout, in place of `size`: `[{ "id": "card", "title": "Card", "size": [320, 360], "cornerRadius": 26 }, …]` (`cornerRadius` optional), the first the default. Your page gets the chosen `id` as `settings.layout` |
 | `settings` | no | controls people can change ([below](#settings)) |
 | `permissions`, `network` | no | see [Permissions](permissions.md) |
 
@@ -56,6 +58,18 @@ Before macOS 26, `clear` and `frosted` fall back to a blurred material.
 A `resizable` widget can be drawn from half to three times its `size`, with the Size slider in its row. Your page still lays out at
 `size`, in its own points, and iWalpapper scales the whole of it, card and clicks included: draw
 for `size` and it stays sharp at any scale.
+
+A widget with nothing to show (a music widget while nothing plays) can call
+`iwalpapper.setVisible(false)`: iWalpapper fades its card out and lets clicks through there, and
+your page clears its own content; `setVisible(true)` brings it back. `display.preview` is `true`
+in the app's own previews (the wallpaper page, Create Extension), where people still need to see
+the widget to place it: show your empty state there instead.
+
+A card that needs less room for a while (the music card with its waveform off) can call
+`iwalpapper.setHeight(points)` (0.7.2): iWalpapper makes the card that many of your page's points
+tall, from 32 up to the layout's height (never taller), keeping its centre, and your page lays out
+at that height. Measure your content (`getBoundingClientRect().height`) and call it again when that
+changes; it is forgotten when the page starts again.
 
 People can switch a glass widget's shadow off in its Widgets panel row. Don't draw your own card,
 border or shadow: CSS `backdrop-filter` can't see the wallpaper behind the page, so it blurs nothing,
@@ -81,8 +95,12 @@ All widgets on a display share one web view, each in its own frame and origin
 - **Clicks only if you ask.** With `"interactive": true` in `widget`, a press inside your card
   reaches your page as `pointerdown`, `mousedown`, `pointermove` while held, `pointerup`, `mouseup`
   and `click` on the element under it, so `button.addEventListener("click", …)` just works. Only
-  presses on the bare desktop come through (not through a window), there's no hover and no
-  keyboard, and the events are synthetic (`isTrusted` is false). Without it, clicks go through to
+  presses on the bare desktop come through (not through a window). With the pointer over your card
+  and no press (0.7.2), the element under it gets `pointerover`, `pointerenter`, `pointermove`,
+  `pointerout` and `pointerleave` (and the `mouse…` ones), about 30 moves a second, never while a
+  window covers the card. CSS `:hover` doesn't follow them: toggle a class in `pointerenter` and
+  `pointerleave`. `iwalpapper.haptic("firm" | "soft")` taps the trackpad, only while the pointer is
+  over your widget. No keyboard, and the events are synthetic (`isTrusted` is false). Without it, clicks go through to
   the desktop; ask only if the widget does something when clicked.
 - **Be cheap.** Redraw on `time.on("minute")` rather than every second where you can. When the
   wallpaper is paused, iWalpapper shows a still of your widget and hides the web view; when it is

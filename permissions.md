@@ -13,9 +13,11 @@ when the extension is added, and can be revoked later.
 
 `permissions` is a list of different names from the table below. `network` (the object) is present
 exactly when the list has `network`: 1-8 lowercase domains the page may `fetch` over https
-(subdomains included), and nothing else. Only widgets get permissions for now; a code wallpaper
-that asks for one is refused, except `location` for a time generator's `"sunrise"` and `"sunset"`
-([Wallpapers › Sunrise and sunset](wallpapers.md#sunrise-and-sunset)).
+(subdomains included), and nothing else. Widgets may have any of them. A live wallpaper
+(`"playback": "live"`, 0.7.2) may have `nowPlaying` and `audioLevels`; a recorded one none, except
+`location` for a time generator's `"sunrise"` and `"sunset"`
+([Wallpapers › Sunrise and sunset](wallpapers.md#sunrise-and-sunset)). Anything else is refused
+when the extension is added.
 
 | Name | Gives | The person sees | Ready in |
 |---|---|---|---|
@@ -24,7 +26,8 @@ that asks for one is refused, except `location` for a time generator's `"sunrise
 | `systemStats` | battery, CPU, memory, network speed | "Can see battery, CPU, memory and network speed" | 0.7.1 |
 | `calendar` | upcoming events, read only | "Can read your upcoming events", then the macOS prompt | 0.7.1 |
 | `location` | coarse location | "Can use your approximate location", then the macOS prompt | 0.7.1 |
-| `nowPlaying` | song, artwork, progress, play/pause/skip | "Can see and control what's playing" | 0.7.2 |
+| `nowPlaying` | song, artwork and its colours, progress, play/pause/skip/seek, opening the app | "Can see and control what's playing" | 0.7.2 |
+| `audioLevels` | how loud the music is, in 24 bands, never the sound | "Can see how loud the music is", then the macOS prompt | 0.7.2 |
 
 ### Network
 
@@ -60,7 +63,8 @@ what you use: every line is one more reason for someone to click Cancel.
 ## Updates and revoking
 
 - An update that adds a permission asks again; one that keeps or drops them doesn't.
-- People switch each permission off and on in the widget's row of the Widgets panel. Switching
+- People switch each permission off and on in the widget's row of the Widgets panel, on a live
+  wallpaper's Library page, and in Settings › Privacy (What each extension may do). Switching
   one off keeps the extension installed; its calls to that namespace fail with `permission` (and
   with `network` off, every fetch is refused), so handle that and show something useful (the last stored value, a hint) instead of
   an empty card.

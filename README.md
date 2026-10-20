@@ -20,7 +20,9 @@ Working examples, ready to copy:
 |---|---|
 | [`DateWidget`](examples/DateWidget) | widget with a setting |
 | [`ClockWidget`](examples/ClockWidget) | widget with no container, the lock-screen faces, glass text and a Size slider |
+| [`MusicWidget`](examples/MusicWidget) | interactive widget with Now Playing, audio levels, Look and Layout choices and a height it asks for |
 | [`GradientWallpaper`](examples/GradientWallpaper) | code wallpaper with colour, choice and slider settings |
+| [`MusicWallpaper`](examples/MusicWallpaper) | live code wallpaper with Now Playing, a WebGL gradient and grouped settings, Follow included |
 | [`GradientPack`](examples/GradientPack) | preset pack of two gradients |
 | [`ShaderWallpaper`](examples/ShaderWallpaper) | GLSL shader |
 | [`TimeWallpaper`](examples/TimeWallpaper) | time generator: eight times of day |

@@ -8,18 +8,27 @@ browser, where there is no bridge.
 
 ## What each kind gets
 
-| Member | Widget | Code wallpaper |
-|---|---|---|
-| `settings` | yes | yes |
-| `time.current()` | yes | yes |
-| `time.on("minute")` | yes | no |
-| `display`, `palette`, `backdrop`, `storage` | yes | no |
-| `ready`, `reportError`, `reportDiagnostic` | yes | yes |
-| `fetch` to `network.hosts` | with `network` | no |
-| `system` | with `systemStats` | no |
-| `location` | with `location` | no |
-| `calendar` | with `calendar` | no |
-| `lockScreen`, `faces`, `glass` | yes | no |
+| Member | Widget | Live wallpaper (0.7.2) | Recorded wallpaper |
+|---|---|---|---|
+| `settings` | yes | yes | yes |
+| `time.current()` | yes | yes | yes |
+| `time.on("minute")` | yes | yes | no |
+| `display`, `storage` | yes | yes | no |
+| `palette`, `backdrop` | yes | empty | no |
+| `ready`, `reportError`, `reportDiagnostic` | yes | yes | yes |
+| clicks and hover, `haptic` | with `interactive` | yes | no |
+| `setVisible`, `setHeight` | yes | no (no card) | no |
+| `fetch` to `network.hosts` | with `network` | no | no |
+| `system` | with `systemStats` | no | no |
+| `location` | with `location` | no | no |
+| `calendar` | with `calendar` | no | no |
+| `nowPlaying` | with `nowPlaying` | with `nowPlaying` | no |
+| `audioLevels` | with `audioLevels` | with `audioLevels` | no |
+| `lockScreen`, `faces`, `glass` | yes | yes | no |
+
+A live wallpaper is a code wallpaper with `"playback": "live"`: its page runs on the desktop as one
+full-screen frame of the widget host, so it gets the bridge as a widget does
+([Wallpapers › Live wallpapers](wallpapers.md#live-wallpapers)).
 
 Preset packs and shaders have no page, so no bridge. Shaders get uniforms instead
 ([Wallpapers › Shaders](wallpapers.md#shaders)).
@@ -31,7 +40,7 @@ iwalpapper.on("settings", (values, state) => render(values));
 iwalpapper.state; // { settings, display, palette, storage }, as last sent
 ```
 
-`on(name, fn)` takes `settings`, `display`, `palette`, `storage`, `system`, `location` or `calendar`. The host sends the whole state
+`on(name, fn)` takes `settings`, `display`, `palette`, `storage`, `system`, `location`, `calendar`, `lockScreen`, `nowPlaying` or `audioLevels`. The host sends the whole state
 once the page has loaded, and again whenever something changes; values never arrive before your
 first script, so draw a sensible default first and redraw in the callback. Each namespace also has
 its own `on(fn)`, the same as `on("<name>", fn)`.
@@ -53,13 +62,15 @@ The values by `id`: the one chosen, else the default. Controls are declared in t
 | `slider` | `min` < `max`, optional `step` (default a hundredth of the range) | a number in range | a number |
 | `color` | none | `#RRGGBB` | a `#RRGGBB` string |
 | `place` | none; widgets only | optional `{ "name", "latitude", "longitude" }` | that object, or `null` until a place is chosen |
+| `apps` | none; widgets and live wallpapers (0.7.2) | optional `{ "mode": "all" \| "only" \| "except", "apps": [bundle ids] }`, else all | that object; filter by `nowPlaying`'s `source.bundleID` |
 
 A `place` setting is a search field in the widget's row, with suggestions from macOS as the
 person types: `{ "id": "city", "type": "place", "title": "City" }`. The lookup is iWalpapper's, so
 it needs no permission; your page gets the name and coordinates (4 decimals) and fetches the rest.
 
 Every control has an `id` (1-64 of `A-Z a-z 0-9 . _ -`, letter or digit first, different from the
-others) and a `title` (1-80).
+others) and a `title` (1-80). An optional `group` (1-40 characters, 0.7.2) lists it under that
+heading on a live wallpaper's Library page, groups in the order they first appear.
 
 ```json
 "settings": [
@@ -132,12 +143,12 @@ iwalpapper.system.on((s) => {
 });
 iwalpapper.system.current();
 // { cpu: 0.12, memory: 0.64, network: { in: 52000, out: 3100 },
-//   battery: { level: 81, pluggedIn: false } }   battery is null on a Mac without one
+//   battery: { level: 81, pluggedIn: true, charging: true } }   battery is null on a Mac without one
 ```
 
 `cpu` and `memory` are shares from 0 to 1 (CPU across every core, memory in use: active, wired and
 compressed). `network` is bytes a second over every interface but loopback. `battery.level` is a
-percentage. The first values come about a second after the page loads, then every 5 seconds, and
+percentage. `pluggedIn` is whether it runs on power; `charging` is whether the battery is taking charge (false when full). The first values come about a second after the page loads, then every 5 seconds, and
 only while the widget runs (paused, nothing is sampled). Without the permission, `current()` and
 `on()` throw an `Error` whose message is `"permission"`.
 
@@ -233,11 +244,49 @@ iwalpapper.reportDiagnostic("drew 12 tiles");   // at most 512 characters
 
 These go into iWalpapper's diagnostics, not on screen.
 
-## Coming later
+## Now Playing (widgets and live wallpapers, `nowPlaying`)
 
-| Release | Namespace | Needs |
-|---|---|---|
-| 0.7.2 | `nowPlaying` (song, artwork, progress, play/pause/skip) | `nowPlaying` |
+```js
+iwalpapper.nowPlaying.on((song) => {
+  if (!song) return showHint("Now Playing isn't available on this Mac");
+  if (!song.title) return showIdle(song.palette);       // nothing plays: the last song's colours
+  cover.src = song.artwork;                             // served in your own origin
+  title.textContent = song.title;
+});
+// { title: "Clair de Lune", artist: "Debussy", album: "Suite bergamasque",
+//   duration: 312.4, elapsed: 41.2, timestamp: 1792360000000, rate: 1, playing: true,
+//   shuffle: false, repeat: null,
+//   artwork: "/_iwalpapper/now-playing/artwork-1f2e…", palette: { colors: ["#7A3B69", …], background: "#24121F", weights: [0.45, …] },
+//   source: { bundleID: "com.apple.Music", name: "Music", icon: "/_iwalpapper/now-playing/icon-com.apple.Music.png" } }
+iwalpapper.nowPlaying.toggle();   // also play, pause, next, previous, shuffle, repeat
+iwalpapper.nowPlaying.seek(90);   // seconds
+iwalpapper.nowPlaying.openApp();  // the app that plays, else the one that played last
+```
+
+What any app on the Mac reports as playing (Music, Spotify, a browser). `elapsed` is the seconds
+played at `timestamp` (milliseconds since 1970); while `playing`, add the time since, times `rate`.
+`shuffle` and `repeat` are `null` when the app has none. `artwork` and `source.icon` load in `<img>`,
+CSS and WebGL like your own files, for widgets with the permission only. `palette` is the artwork's
+colours (`weights`: how much of it each covers). While nothing plays, `title` is `null` and the
+artwork, colours and app are the last song's; `null` instead of an object means macOS doesn't give
+Now Playing to iWalpapper. The controls need `interactive: true` to be clicked. Without the
+permission, every call throws an `Error` whose message is `"permission"`.
+
+## Audio levels (widgets and live wallpapers, `audioLevels`)
+
+```js
+iwalpapper.audioLevels.on((bands) => {
+  if (!bands) return showFlat();          // macOS hasn't allowed system audio
+  bars.forEach((bar, i) => bar.style.transform = `scaleY(${bands[i]})`);
+});
+// [0.12, 0.48, 0.91, …]   24 bands, low to high, 0-1
+```
+
+How loud what the Mac plays is, in 24 bands spaced like hearing (the native music widget's
+waveform), about 30 times a second while a song plays, all zeros while nothing does. Never the
+sound itself. macOS asks the person about Screen & System Audio Recording the first time a
+widget with it runs; until they allow it, and if they don't, the value is `null`. Without the
+permission, `current()` and `on()` throw an `Error` whose message is `"permission"`.
 
 Calling a namespace whose permission was revoked fails with `permission`. See
 [Permissions](permissions.md).

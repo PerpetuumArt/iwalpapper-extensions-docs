@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Music</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="gradient" width="352" height="220"></canvas>
+<main id="player" class="hidden">
+  <button id="artwork" type="button" aria-label="Artwork; click twice to open the app">
+    <img id="cover" alt="">
+    <svg class="note" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 17.5V6l10-2v11.5a2.5 2.5 0 1 1-2-2.45V7.1L11 8.3v9.2a2.5 2.5 0 1 1-2-2.45z"/></svg>
+    <span id="armed" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h9v2H8.4l10.3 10.3-1.4 1.4L7 8.4V14H5z"/></svg></span>
+  </button>
+  <div id="column">
+    <div id="title"></div>
+    <div id="second"></div>
+    <div id="progress">
+      <div id="track"><div id="fill"></div></div>
+      <div id="times"><span id="elapsed">0:00</span><span id="remaining">-0:00</span></div>
+    </div>
+    <div id="controls">
+      <button type="button" class="shuffle" aria-label="Shuffle"><svg viewBox="0 0 24 24"><path d="M16 4l4 3-4 3V8h-1.6l-3 4 3 4H16v-2l4 3-4 3v-2h-2.6l-3.4-4.5L6.6 18H3v-2h2.6l3-4-3-4H3V6h3.6L10 10.5 13.4 6H16z"/></svg></button>
+      <span class="middle">
+        <button type="button" class="previous" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6zm.5-6 8.5 6V6z"/></svg></button>
+        <button type="button" class="toggle" aria-label="Play or pause"><svg viewBox="0 0 24 24"><path class="play" d="M7 4.5v15l12-7.5z"/><path class="pause" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg></button>
+        <button type="button" class="next" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6zm9-12v12l8.5-6z"/></svg></button>
+      </span>
+      <button type="button" class="repeat" aria-label="Repeat"><svg viewBox="0 0 24 24"><path d="M7 7h10V4l4 4-4 4V9H7v4H5V9a2 2 0 0 1 2-2zm10 10H7v3l-4-4 4-4v3h10v-4h2v4a2 2 0 0 1-2 2z"/></svg></button>
+    </div>
+  </div>
+</main>
+<button id="launcher" type="button" class="hidden" aria-label="Open the music app"><svg viewBox="0 0 24 24"><path d="M9 17.5V6l10-2v11.5a2.5 2.5 0 1 1-2-2.45V7.1L11 8.3v9.2a2.5 2.5 0 1 1-2-2.45z"/></svg></button>
+<div id="unavailable" class="hidden">Now Playing is not available on this version of macOS</div>
+<script src="gradient.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

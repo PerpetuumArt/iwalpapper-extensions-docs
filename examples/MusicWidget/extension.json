@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 3,
+  "id": "app.iwalpapper.music",
+  "version": "0.1.2",
+  "kind": "widget",
+  "title": "Music",
+  "description": "What's playing on your Mac, with its artwork and controls. The native Music widget, made as an extension.",
+  "author": { "name": "iWalpapper" },
+  "entry": { "path": "index.html", "runtime": "web" },
+  "bridgeVersion": 2,
+  "permissions": ["nowPlaying", "audioLevels"],
+  "widget": {
+    "container": "glass", "containers": ["glass", "frosted", "solid"], "cornerRadius": 26,
+    "layouts": [
+      { "id": "card", "title": "Card", "size": [320, 252], "cornerRadius": 26 },
+      { "id": "compact", "title": "Compact", "size": [360, 70], "cornerRadius": 22 }
+    ],
+    "resizable": true, "interactive": true
+  },
+  "settings": [
+    { "id": "controls", "type": "toggle", "title": "Controls", "default": true },
+    { "id": "artwork", "type": "toggle", "title": "Artwork", "default": true },
+    { "id": "source", "type": "toggle", "title": "App icon", "default": true },
+    { "id": "progress", "type": "toggle", "title": "Progress and time", "default": true },
+    { "id": "waveform", "type": "toggle", "title": "Waveform", "default": false },
+    { "id": "playPause", "type": "toggle", "title": "Play and pause", "default": true },
+    { "id": "skip", "type": "toggle", "title": "Previous and next", "default": true },
+    { "id": "lockProgress", "type": "toggle", "title": "Lock progress bar", "default": true },
+    { "id": "haptic", "type": "choice", "title": "Haptic", "options": ["Firm", "Soft", "Off"], "default": "Firm" }
+  ]
+}

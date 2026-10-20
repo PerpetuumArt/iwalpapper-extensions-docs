@@ -1,0 +1,66 @@
+/* The native Now Playing wallpaper's measures (MusicWallpaperLayout): Music's own proportions at a
+   408 pt artwork, scaled with it (--unit), the artwork's side a share of the screen's height (--side).
+   SVG glyphs are drawn 1.4 times the SF Symbols' point size, which they match at that. */
+html, body { margin: 0; height: 100%; overflow: hidden; background: #16151C; color: #fff;
+             font: 13px -apple-system, system-ui, sans-serif; -webkit-user-select: none; cursor: default; }
+#gradient { position: fixed; inset: 0; width: 100%; height: 100%; }
+
+button { all: unset; display: inline-flex; align-items: center; justify-content: center; }
+svg { fill: currentColor; }
+
+#player { position: absolute; left: calc(var(--x) - var(--side) / 2); top: calc(var(--y) - var(--side) / 2); width: var(--side); height: var(--side); }
+
+#artwork { position: relative; width: 100%; height: 100%; border-radius: var(--radius); overflow: hidden; background: rgba(255, 255, 255, 0.12);
+           transition: transform 0.3s cubic-bezier(0.34, 1.3, 0.64, 1); }
+.shadow #artwork { box-shadow: 0 calc(var(--side) * 0.025) calc(var(--side) * 0.1) rgba(0, 0, 0, 0.35); }
+.hovers #artwork.grown, .hovers #artwork.armed { transform: scale(1.04); }
+#cover { width: 100%; height: 100%; object-fit: cover; }
+#cover:not([src]) { display: none; }
+.note { width: calc(var(--side) * 0.42); height: calc(var(--side) * 0.42); opacity: 0.7; position: absolute; }
+#cover[src] ~ .note { display: none; }
+#armed { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.45); display: none; align-items: center; justify-content: center; }
+#armed svg { width: calc(var(--side) * 0.22); height: calc(var(--side) * 0.22); }
+#artwork.armed #armed { display: flex; }
+
+#column { position: absolute; top: calc(var(--side) * 1.24); left: calc(var(--side) * -0.185); width: calc(var(--side) * 1.37);
+          text-shadow: 0 var(--unit) calc(var(--unit) * 6) rgba(0, 0, 0, 0.25); }
+#column svg { filter: drop-shadow(0 var(--unit) calc(var(--unit) * 3) rgba(0, 0, 0, 0.25)); }
+#title, #second { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#title { font-size: calc(var(--unit) * 19); font-weight: 600; }
+#second { font-size: calc(var(--unit) * 16); color: rgba(255, 255, 255, 0.75); margin-top: calc(var(--unit) * 2); }
+
+#progress { margin-top: calc(var(--unit) * 22); }
+#track { position: relative; height: calc(var(--unit) * 6); margin: calc(var(--unit) * 4) 0; border-radius: 99px; background: rgba(255, 255, 255, 0.25); }
+#fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: inherit; background: rgba(255, 255, 255, 0.85); }
+#times { display: flex; justify-content: space-between; margin-top: calc(var(--unit) * 5); font-size: calc(var(--unit) * 11); font-weight: 500;
+         font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.7); }
+
+#controls { position: relative; display: flex; justify-content: space-between; align-items: center; margin-top: calc(var(--unit) * 22); }
+#controls .middle { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: calc(var(--unit) * 46); }
+#controls button { transition: transform 0.12s ease-out, opacity 0.12s ease-out; }
+#controls .previous, #controls .next { width: calc(var(--unit) * 40.8); height: calc(var(--unit) * 40.8); }
+#controls .previous svg, #controls .next svg { width: calc(var(--unit) * 33.6); height: calc(var(--unit) * 33.6); }
+#controls .toggle { width: calc(var(--unit) * 51); height: calc(var(--unit) * 51); }
+#controls .toggle svg { width: calc(var(--unit) * 42); height: calc(var(--unit) * 42); }
+#controls .shuffle, #controls .repeat { width: calc(var(--unit) * 28.9); height: calc(var(--unit) * 28.9); }
+#controls .shuffle svg, #controls .repeat svg { width: calc(var(--unit) * 23.8); height: calc(var(--unit) * 23.8); }
+#controls .off { opacity: 0.5; }
+#controls .gone { visibility: hidden; }
+#controls button.pressed { transform: scale(0.86); opacity: 0.7; }
+.toggle .pause, .playing .toggle .play { display: none; }
+.playing .toggle .pause { display: inline; }
+
+/* Nothing playing: the open button, dead centre, small and quiet. Stamp is the note pressed into the
+   wallpaper in its main colour a shade darker; Glass a clear note, lit along its top. */
+#launcher { position: fixed; left: 50%; top: 50%; width: var(--launcher); height: var(--launcher); margin: calc(var(--launcher) / -2) 0 0 calc(var(--launcher) / -2);
+            color: var(--stamp); transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1); }
+#launcher svg { width: 84%; height: 84%; filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.1)); }
+#launcher.glass { color: rgba(255, 255, 255, 0.16); }
+#launcher.glass svg { filter: drop-shadow(0 -1px 0 rgba(255, 255, 255, 0.55)) drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25)); }
+#launcher.grown { transform: scale(1.08); }
+#launcher.pressed { transform: scale(0.92); }
+
+#unavailable { position: absolute; left: var(--x); top: var(--y); transform: translate(-50%, -50%); white-space: nowrap;
+               font-size: calc(var(--unit) * 14); font-weight: 500; color: rgba(255, 255, 255, 0.7); }
+
+.hidden { display: none !important; }
